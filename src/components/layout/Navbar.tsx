@@ -110,7 +110,7 @@ const Navbar = () => {
         </div>
       </div>
       
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Fixed solid background */}
       <div 
         className={`fixed inset-0 bg-white z-50 transition-transform duration-500 ease-in-out ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
@@ -137,35 +137,35 @@ const Navbar = () => {
             <Link 
               to="/" 
               className="text-2xl font-medium py-2 border-b border-gray-100"
-              onClick={toggleMobileMenu}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Home
             </Link>
             <Link 
               to="/men" 
               className="text-2xl font-medium py-2 border-b border-gray-100"
-              onClick={toggleMobileMenu}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Men
             </Link>
             <Link 
               to="/women" 
               className="text-2xl font-medium py-2 border-b border-gray-100"
-              onClick={toggleMobileMenu}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Women
             </Link>
             <Link 
               to="/kids" 
               className="text-2xl font-medium py-2 border-b border-gray-100"
-              onClick={toggleMobileMenu}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Kids
             </Link>
             <Link 
               to="/collections" 
               className="text-2xl font-medium py-2 border-b border-gray-100"
-              onClick={toggleMobileMenu}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Collections
             </Link>

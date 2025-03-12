@@ -29,7 +29,8 @@ const Index: React.FC<IndexProps> = ({ category: propCategory }) => {
       
       <main className="flex-grow">
         <HeroSection />
-        <FeaturedProducts category={activeCategory} />
+        {activeCategory && <FeaturedProducts category={activeCategory} />}
+        {!activeCategory && <FeaturedProducts />}
         <TrendingSection />
       </main>
       
