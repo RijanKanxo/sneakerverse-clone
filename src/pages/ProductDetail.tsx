@@ -1,11 +1,12 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Heart, ShoppingBag, ChevronDown, ChevronUp } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { products } from '../utils/productData';
 import { toast } from '../hooks/use-toast';
+import { useCart } from '../contexts/CartContext';
+import CartSlider from '../components/ui/CartSlider';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +16,17 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  
+  const { addToCart } = useCart();
+  
+  useEffect(() => {
+    // Reset selections when product changes
+    if (product?.sizes && product.sizes.length > 0) {
+      setSelectedSize('');
+    }
+    setQuantity(1);
+  }, [id, product]);
   
   // Handle case where product is not found
   if (!product) {
@@ -41,10 +53,7 @@ const ProductDetail = () => {
       return;
     }
     
-    toast({
-      title: "Added to cart",
-      description: `${product.name} (Size: ${selectedSize}) has been added to your cart.`,
-    });
+    addToCart(product, quantity, selectedSize);
   };
   
   const relatedProducts = products
@@ -216,6 +225,11 @@ const ProductDetail = () => {
       </main>
       
       <Footer />
+      
+      <CartSlider 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+      />
     </div>
   );
 };

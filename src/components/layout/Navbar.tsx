@@ -1,13 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { Search, ShoppingBag, User, Menu, X, Heart } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useCart } from '../../contexts/CartContext';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { cartCount } = useCart();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -67,12 +70,14 @@ const Navbar = () => {
           <div className="flex items-center space-x-6">
             <button 
               className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-secondary transition-all duration-300 hover:bg-secondary/70"
+              onClick={() => navigate('/search')}
             >
               <Search className="w-5 h-5" />
             </button>
             
             <button 
               className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-secondary transition-all duration-300 hover:bg-secondary/70"
+              onClick={() => navigate('/favorites')}
             >
               <Heart className="w-5 h-5" />
             </button>
@@ -83,12 +88,13 @@ const Navbar = () => {
             >
               <ShoppingBag className="w-5 h-5" />
               <span className="absolute -top-1 -right-1 bg-black text-white text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center">
-                0
+                {cartCount}
               </span>
             </button>
             
             <button 
               className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-secondary transition-all duration-300 hover:bg-secondary/70"
+              onClick={() => navigate('/account')}
             >
               <User className="w-5 h-5" />
             </button>
@@ -167,16 +173,43 @@ const Navbar = () => {
           
           <div className="mt-auto pt-8">
             <div className="flex justify-around">
-              <button className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary">
+              <button 
+                className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary"
+                onClick={() => {
+                  navigate('/search');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
                 <Search className="w-6 h-6" />
               </button>
-              <button className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary">
+              <button 
+                className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary"
+                onClick={() => {
+                  navigate('/favorites');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
                 <Heart className="w-6 h-6" />
               </button>
-              <button className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary">
+              <button 
+                className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary relative"
+                onClick={() => {
+                  toggleCart();
+                  setIsMobileMenuOpen(false);
+                }}
+              >
                 <ShoppingBag className="w-6 h-6" />
+                <span className="absolute -top-1 -right-1 bg-black text-white text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
               </button>
-              <button className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary">
+              <button 
+                className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary"
+                onClick={() => {
+                  navigate('/account');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
                 <User className="w-6 h-6" />
               </button>
             </div>

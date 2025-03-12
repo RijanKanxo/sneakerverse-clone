@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import HeroSection from '../components/home/HeroSection';
@@ -7,8 +8,16 @@ import FeaturedProducts from '../components/home/FeaturedProducts';
 import TrendingSection from '../components/home/TrendingSection';
 import CartSlider from '../components/ui/CartSlider';
 
-const Index = () => {
+interface IndexProps {
+  category?: string;
+}
+
+const Index: React.FC<IndexProps> = ({ category: propCategory }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const { category: paramCategory } = useParams<{ category: string }>();
+  
+  // Use either the prop category or the URL parameter
+  const activeCategory = propCategory || paramCategory;
   
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
@@ -20,7 +29,7 @@ const Index = () => {
       
       <main className="flex-grow">
         <HeroSection />
-        <FeaturedProducts />
+        <FeaturedProducts category={activeCategory} />
         <TrendingSection />
       </main>
       

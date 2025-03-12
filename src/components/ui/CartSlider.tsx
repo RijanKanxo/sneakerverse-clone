@@ -1,16 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, Trash2, ShoppingBag, Plus, Minus } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-  size: string;
-}
+import { useCart } from '../../contexts/CartContext';
 
 interface CartSliderProps {
   isOpen: boolean;
@@ -18,30 +10,8 @@ interface CartSliderProps {
 }
 
 const CartSlider: React.FC<CartSliderProps> = ({ isOpen, onClose }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isClosing, setIsClosing] = useState(false);
-  
-  // Sample data - in a real app, this would come from a cart context or state
-  useEffect(() => {
-    setCartItems([
-      {
-        id: '1',
-        name: 'Nike Air Max 90',
-        price: 150,
-        image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d',
-        quantity: 1,
-        size: 'US 10'
-      },
-      {
-        id: '2',
-        name: 'Nike Sportswear Club Fleece',
-        price: 55,
-        image: 'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d',
-        quantity: 1,
-        size: 'L'
-      }
-    ]);
-  }, []);
+  const { cartItems, updateQuantity, removeFromCart } = useCart();
   
   const handleCloseCart = () => {
     setIsClosing(true);
@@ -49,20 +19,6 @@ const CartSlider: React.FC<CartSliderProps> = ({ isOpen, onClose }) => {
       onClose();
       setIsClosing(false);
     }, 300);
-  };
-  
-  const updateQuantity = (id: string, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    
-    setCartItems(items => 
-      items.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
-  
-  const removeItem = (id: string) => {
-    setCartItems(items => items.filter(item => item.id !== id));
   };
   
   const calculateTotal = () => {
@@ -141,7 +97,7 @@ const CartSlider: React.FC<CartSliderProps> = ({ isOpen, onClose }) => {
                           </h3>
                           <p className="ml-4">${item.price}</p>
                         </div>
-                        <p className="mt-1 text-sm text-gray-500">Size: {item.size}</p>
+                        <p className="mt-1 text-sm text-gray-500">Size: {item.selectedSize}</p>
                       </div>
                       
                       <div className="flex flex-1 items-end justify-between text-sm">
@@ -165,7 +121,7 @@ const CartSlider: React.FC<CartSliderProps> = ({ isOpen, onClose }) => {
                         {/* Remove Button */}
                         <button
                           type="button"
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeFromCart(item.id)}
                           className="text-gray-500 hover:text-gray-700 flex items-center"
                         >
                           <Trash2 className="w-4 h-4 mr-1" />

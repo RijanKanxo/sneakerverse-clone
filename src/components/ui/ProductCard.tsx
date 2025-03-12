@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
-import { toast } from '../../hooks/use-toast';
+import { useCart } from '../../contexts/CartContext';
+import { ProductType } from '../../types/ProductType';
 
-interface ProductCardProps {
+interface ProductCardProps extends ProductType {
   id: string;
   name: string;
   category: string;
@@ -22,17 +23,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
   image,
   hoverImage,
   isNew = false,
+  ...rest
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { addToCart } = useCart();
   
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    toast({
-      title: "Added to cart",
-      description: `${name} has been added to your cart.`,
-    });
+    // Using a default size for quick add
+    const defaultSize = rest.sizes && rest.sizes.length > 0 ? rest.sizes[0] : "M";
+    addToCart({ id, name, category, price, image, hoverImage, isNew, ...rest }, 1, defaultSize);
   };
   
   return (
