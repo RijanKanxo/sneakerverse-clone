@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ShoppingBag } from 'lucide-react';
+import { toast } from '../../hooks/use-toast';
 
 interface ProductCardProps {
   id: string;
@@ -22,6 +24,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
   isNew = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    toast({
+      title: "Added to cart",
+      description: `${name} has been added to your cart.`,
+    });
+  };
   
   return (
     <div 
@@ -53,8 +65,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
             className="absolute bottom-0 left-0 w-full bg-black bg-opacity-0 group-hover:bg-opacity-95 p-4 translate-y-full group-hover:translate-y-0 transition-all duration-300"
           >
             <button 
-              className="w-full text-white py-2 text-sm uppercase font-medium"
+              className="w-full text-white py-2 text-sm uppercase font-medium flex items-center justify-center"
+              onClick={handleQuickAdd}
             >
+              <ShoppingBag className="w-4 h-4 mr-2" />
               Quick Add
             </button>
           </div>

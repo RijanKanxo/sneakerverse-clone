@@ -10,6 +10,10 @@ import CartSlider from '../components/ui/CartSlider';
 const Index = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
+  };
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />

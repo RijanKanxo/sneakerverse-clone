@@ -1,11 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { Search, ShoppingBag, User, Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search, ShoppingBag, User, Menu, X, Heart } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const location = useLocation();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -20,10 +22,20 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    // Close mobile menu when route changes
+    setIsMobileMenuOpen(false);
+    document.body.style.overflow = 'auto';
+  }, [location]);
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     // Prevent body scrolling when mobile menu is open
     document.body.style.overflow = isMobileMenuOpen ? 'auto' : 'hidden';
+  };
+
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
   };
 
   return (
@@ -60,7 +72,14 @@ const Navbar = () => {
             </button>
             
             <button 
+              className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-secondary transition-all duration-300 hover:bg-secondary/70"
+            >
+              <Heart className="w-5 h-5" />
+            </button>
+            
+            <button 
               className="flex items-center justify-center w-10 h-10 rounded-full bg-secondary transition-all duration-300 hover:bg-secondary/70 relative"
+              onClick={toggleCart}
             >
               <ShoppingBag className="w-5 h-5" />
               <span className="absolute -top-1 -right-1 bg-black text-white text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center">
@@ -150,6 +169,9 @@ const Navbar = () => {
             <div className="flex justify-around">
               <button className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary">
                 <Search className="w-6 h-6" />
+              </button>
+              <button className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary">
+                <Heart className="w-6 h-6" />
               </button>
               <button className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary">
                 <ShoppingBag className="w-6 h-6" />
